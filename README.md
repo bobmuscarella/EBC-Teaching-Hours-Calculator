@@ -1,4 +1,4 @@
-# EBC teaching hours
+# EBC teaching hour calculator
 
 Tools to keep track of teaching hours for courses at EBC.
 
