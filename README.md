@@ -6,7 +6,7 @@ A tool to keep track of GU teaching hours for IEG courses.  Given a course sched
 ### Arguments
 `infile`: A course schedule (downloaded from TimeEdit as a .xlsx file - currently must be in English).  If the path is not included, this needs to be located in the working directory.
 
-`outfile`: The desired name of the output file (ending in .xlsx).  If the path is not included, it will be save in the working directory.
+`outfile`: The desired name of the output file (ending in .xlsx).  If the path is not included, it will be saved in the working directory.
 
 `course_leader`: The name of the course leader for assigning administration hours.
 
