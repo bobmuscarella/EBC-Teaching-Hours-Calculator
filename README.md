@@ -1,15 +1,32 @@
-# EBC Teaching Hours Calculator
+# IEG Teaching Hours Calculator
 
-Tools to keep track of teaching hours for courses at EBC.
+Tools to keep track of GU teaching hours for courses at IEG (and elsehwere?).
 
-For now, there is one script: `Count_hours.R`
+For now, there is one function: `Count_hours.R`
 
-Given a course schedule (output from TimeEdit as an Excel file), that script can provide a table of course hours per teacher.  For now, the user needs to manually add a column (named "Code") to the TimeEdit schedule (*before* starting the script) to assign activities to four classes: Lectures, Labs, Excursions, and Presentations/Supervision.  The scheduled hours for each of these activities get multiplied differently when computing the total number of hours.
+Given a course schedule (downloaded from TimeEdit as a .xlsx file), the function provides a table of hours in different activity categories, as well as the total GU hours, per teacher.  
 
+Correctly assigning hours to a certain activity (and thus getting the correct GU multiplier for hours) depends on the "Reason" column from the TimeEdit schedule.  To ensure the correct GU multiplier for each activity, please include one of the following labels in the 'Reason' column for all rows: 
+- lecture
+- lab
+- exercise
+- excursion
+- field course
+- seminar
+- exam
+- presentation
+- supervision
+
+The scheduled hours for each of these activities get multiplied differently when computing the total number of GU hours.  We use the following table:
 
 | Activity | Acitivity Code | Hour Multiplier | 
 |:----------|:-------------:|:------------:|
 | Lecture |  1 | 4 |
 | Lab | 2 | 2 |
+| Exercise | 2 | 2 |
+| Field course | 3 | 1.5 |
 | Excursion | 3 | 1.5 |
-| Presentation, Supervision | 4 | 1 |
+| Seminar | 3 | 1.5 |
+| Exam | 4 | 1 |
+| Presentation | 4 | 1 |
+| Supervision | 4 | 1 |
