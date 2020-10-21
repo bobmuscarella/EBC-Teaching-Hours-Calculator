@@ -95,11 +95,3 @@ Please check row(s)", paste(which(is.na(te$multiplier))+6, collapse=", "), "in t
   xlsx::write.xlsx(hrsDF, outfile, row.names = F)
   
 }
-
-
-
-# count_hours("TimeEdit_2020-10-21_12_02.xls", "test.xlsx", "Robert Muscarella")
-
-
-
-
