@@ -62,6 +62,7 @@ Please check row(s)", paste(which(is.na(te$multiplier))+6, collapse=", "), "in t
   }
   
   te$multiplier[is.na(te$multiplier)] <- 1
+  levels(te$activity) <- 1:4
   te$activity[is.na(te$activity)] <- 4
   
   hrmat <- te[,c('activity','multiplier','hours')]
