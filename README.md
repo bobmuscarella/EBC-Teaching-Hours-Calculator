@@ -30,7 +30,7 @@ Correctly assigning hours to a certain activity (and thus getting the correct GU
 ### To use
 1. Download the course schedule to be analyzed from TimeEdit site as a .xlsx file.
 
-2. Open R and load the funciton by copying the following code:
+2. Open R and load the funciton by running the following code:
 ```{R}
 source("https://raw.githubusercontent.com/bobmuscarella/EBC-Teaching-Hours-Calculator/master/Count_hours.R")
 ```
