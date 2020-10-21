@@ -29,9 +29,14 @@ Note: No development hours are assigned by this program. If desired, you need to
 
 ### To use
 1. Download the course schedule to be analyzed from TimeEdit site as a .xlsx file.
-2. Download the file `count_hours.R`.
-3. Open R type: 
 
+2. Open R and load the funciton by typing:
 ```{R}
-source(count_hours.R)
+source("https://raw.githubusercontent.com/bobmuscarella/EBC-Teaching-Hours-Calculator/master/Count_hours.R")
 ```
+3. Run the function in R by typing:
+```{R}
+count_hours("My_TimeEdit_File.xls", "My_Output_File.xlsx", "Course leader")
+```
+* Note: You need to edit the arguments to reflect your input file, desired output file name, and the name of the course leader.
+* Note: Either your input file needs to be located in your working directory or you should specify the full path to the file.
