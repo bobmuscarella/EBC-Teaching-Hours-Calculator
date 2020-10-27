@@ -13,7 +13,7 @@ A tool to keep track of GU teaching hours for IEG courses.  Given a course sched
 ### Details
 Correctly assigning hours to a certain activity (and thus getting the correct GU multiplier for hours) depends on the "Reason" column from the TimeEdit schedule.  To ensure the correct GU multiplier for each activity, please include one of the activities from the table below in the 'Reason' column for all rows.  The scheduled hours for each of these activities get multiplied differently when computing the total number of GU hours.  We use the following table:
 
-| Activity | Acitivity Code | Hour Multiplier | 
+| Activity | Activity Code | Hour Multiplier | 
 |:----------|:-------------:|:------------:|
 | Lecture |  1 | 4 |
 | Lab | 2 | 2 |
