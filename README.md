@@ -4,9 +4,9 @@
 A tool to keep track of GU teaching hours for IEG courses.  Given a course schedule (downloaded from TimeEdit as a .xlsx file), the function provides a table of hours in different activity categories, as well as the total GU hours, per teacher.  For now, this requires an English version of the schedule to be downloaded from TimeEdit but we can make a Swedish version easily if that is of interest.  The tool uses one R function: `count_hours.R`
 
 ### Arguments
-`infile`: A course schedule (downloaded from TimeEdit as a .xlsx file - currently must be in English).  If the path is not included, this needs to be located in the working directory.
+`infile`: A course schedule (downloaded from TimeEdit as a .xls file - **currently must be in English**).  If the path is not included, this needs to be located in the working directory.
 
-`outfile`: The desired name of the output file (ending in .xlsx).  If the path is not included, it will be saved in the working directory.
+`outfile`: The desired name of the output file (ending in .xls).  If the path is not included, it will be saved in the working directory.
 
 `course_leader`: The name of the course leader for assigning administration hours.
 
@@ -28,16 +28,21 @@ Correctly assigning hours to a certain activity (and thus getting the correct GU
 *Note: Development hours are **not** assigned by this program. If desired, you need to add these manually and remember to update the total GU hours in the output file.
 
 ### To use
-1. Download the course schedule to be analyzed from TimeEdit site as a .xlsx file.
+1. Download the course schedule to be analyzed from TimeEdit site as a .xls file.
+
+*Note: You may need to edit the text in the "Reason" column so that it includes one of the Activity types from the table above.
 
 2. Open R and load the funciton by running the following code:
 ```{R}
 source("https://raw.githubusercontent.com/bobmuscarella/EBC-Teaching-Hours-Calculator/master/Count_hours.R")
 ```
+
 3. Run the function in R by typing:
 ```{R}
 count_hours("My_TimeEdit_File.xls", "My_Output_File.xlsx", "Course leader")
 ```
-*Note: You need to edit the arguments to reflect your input file, desired output file name, and the name of the course leader.
 
 *Note: Either your input file needs to be located in your working directory or you should specify the full path to the file.
+
+*Note: You need to edit the arguments to reflect your input file, desired output file name, and the name of the course leader.
+
