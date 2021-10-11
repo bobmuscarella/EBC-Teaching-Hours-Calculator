@@ -79,7 +79,7 @@ Please check row(s)", paste(which(is.na(te$multiplier))+6, collapse=", "), "in t
   for(i in seq_along(teachers)){
     fochrdf <- hrmat[grepl(teachers[i], te$Staff),]
     hrsDF[i,4:7] <- tapply(fochrdf$hours, fochrdf$activity, sum)
-    hrsDF[i,8] <- sum(fochrdf$GU_hours)
+    hrsDF[i,8] <- sum(fochrdf$GU_hours) + 40*teachers[i] %in% course_leader
   }
   
   hrsDF[is.na(hrsDF)] <- 0
