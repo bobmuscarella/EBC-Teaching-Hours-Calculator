@@ -1,26 +1,29 @@
 count_hours <- function(infile, outfile, course_leader=NULL){
   
   # Read the input file
-  te <- readxl::read_excel(infile, skip=5)
+  te <- as.data.frame(readxl::read_excel(infile, skip=5))
   
   # Remove lines with no teacher assigned
-  te <- te[!is.na(te$Staff),]
+  te <- te[!is.na(te$Teacher),]
   
-  # Get start times/dates
-  sdts <- te$`Begin date`
-  stms <- te$`Begin time`
-  s <- timeDate::timeDate(paste(sdts, stms), format = "%Y-%m-%d %H:%M")
-  
-  # Convert start times at quarter past to one hour
-  s[grepl(':15', s)] <- s[grepl(':15', s)] - (15*60)
-  
-  # Get end times/dates
-  edts <- te$`End date`
-  etms <- te$`End time`
-  e <- timeDate::timeDate(paste(edts, etms), format = "%Y-%m-%d %H:%M")
+  # # Get start times/dates
+  # sdts <- te$`Begin date`
+  # stms <- te$`Begin time`
+  # s <- timeDate::timeDate(paste(sdts, stms), format = "%Y-%m-%d %H:%M")
+  # 
+  # # Convert start times at quarter past to one hour
+  # s[grepl(':15', s)] <- s[grepl(':15', s)] - (15*60)
+  # 
+  # # Get end times/dates
+  # edts <- te$`End date`
+  # etms <- te$`End time`
+  # e <- timeDate::timeDate(paste(edts, etms), format = "%Y-%m-%d %H:%M")
   
   # Count hours in each row
-  te$hours <- as.vector(e-s)
+  # te$hours <- as.vector(e-s)
+  
+  # Round activity hours to nearest 0.5 (e.g., 45 min sessions get 1 hour)
+  te$hours <- plyr::round_any(te$Length, 0.5)
   
   ### Activity code
   # The hours assigned to each activity get multiplied to arrive at GU hours.
@@ -52,13 +55,13 @@ count_hours <- function(infile, outfile, course_leader=NULL){
   
   if(any(is.na(te$multiplier))){
     message(paste("Warning: Activity type is not recognized from the 'Reason' column. 
-Please check row(s)", paste(which(is.na(te$multiplier))+6, collapse=", "), "in the input spreadsheet. Until this is changed, these hours will be multiplied 1x and counted as 'Supervision'."))
+The following row(s) in the input spreadsheet should be checked:"))
     
     mat <- data.frame(cbind(te$Reason[which(is.na(te$multiplier))], which(is.na(te$multiplier))+6))
     names(mat) <- c("Reason","Row")
     print(mat)
     
-    message("To ensure the correct multiplier, please use one of the following labels in all rows for the 'Reason' column: lecture, lab, exercise, excursion, field course, seminar, exam, presentation, or supervision.")
+    message("Until this is changed, these hours will be multiplied by 1 and counted as 'Supervision'. To ensure the correct multiplier, please use one of the following labels in all rows for the 'Reason' column: lecture, lab, exercise, excursion, field course, seminar, exam, presentation, or supervision.")
   }
   
   te$multiplier[is.na(te$multiplier)] <- 1
@@ -70,14 +73,20 @@ Please check row(s)", paste(which(is.na(te$multiplier))+6, collapse=", "), "in t
   hrmat$GU_hours <- hrmat$multiplier * hrmat$hours
   
   # Make a list of all teachers
-  teachers <- sort(unique(c(course_leader, unlist(strsplit(te$Staff, ', ')))))
+  teachers <- sort(unique(c(course_leader, unlist(strsplit(te$Teacher, ', ')))))
   
   # Count hours per teacher per activity
-  hrsDF <- data.frame(Teacher=teachers, Administration=NA, Development=NA, 
-                      Lecture=NA, Exercise=NA, Excursion=NA, Supervision=NA, Total=NA)
+  hrsDF <- data.frame(Teacher=teachers, 
+                      Administration=NA, 
+                      Development=NA, 
+                      Lecture=NA, 
+                      Exercise=NA, 
+                      Excursion=NA, 
+                      Supervision=NA, 
+                      Total_GU=NA)
   
   for(i in seq_along(teachers)){
-    fochrdf <- hrmat[grepl(teachers[i], te$Staff),]
+    fochrdf <- hrmat[grepl(teachers[i], te$Teacher),]
     hrsDF[i,4:7] <- tapply(fochrdf$hours, fochrdf$activity, sum)
     hrsDF[i,8] <- sum(fochrdf$GU_hours) + 40*teachers[i] %in% course_leader
   }
