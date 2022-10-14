@@ -3,8 +3,10 @@ count_hours <- function(infile, outfile, course_leader=NULL){
   # Read the input file
   te <- as.data.frame(readxl::read_excel(infile, skip=5))
   
+  name_col <- names(te)[which(tolower(names(te)) %in% c("teacher", "staff"))]
+  
   # Remove lines with no teacher assigned
-  te <- te[!is.na(te$Teacher),]
+  te <- te[!is.na(te[,name_col]),]
   
   # # Get start times/dates
   # sdts <- te$`Begin date`
@@ -73,7 +75,7 @@ The following row(s) in the input spreadsheet should be checked:"))
   hrmat$GU_hours <- hrmat$multiplier * hrmat$hours
   
   # Make a list of all teachers
-  teachers <- sort(unique(c(course_leader, unlist(strsplit(te$Teacher, ', ')))))
+  teachers <- sort(unique(c(course_leader, unlist(strsplit(te[,name_col], ', ')))))
   
   # Count hours per teacher per activity
   hrsDF <- data.frame(Teacher=teachers, 
@@ -86,7 +88,7 @@ The following row(s) in the input spreadsheet should be checked:"))
                       Total_GU=NA)
   
   for(i in seq_along(teachers)){
-    fochrdf <- hrmat[grepl(teachers[i], te$Teacher),]
+    fochrdf <- hrmat[grepl(teachers[i], te[,name_col]),]
     hrsDF[i,4:7] <- tapply(fochrdf$hours, fochrdf$activity, sum)
     hrsDF[i,8] <- sum(fochrdf$GU_hours) + 40*teachers[i] %in% course_leader
   }
