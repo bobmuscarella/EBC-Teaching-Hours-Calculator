@@ -28,7 +28,7 @@ Correctly assigning hours to a certain activity (and thus getting the correct GU
 *Note: Development hours are **not** assigned by this program. If desired, you need to add these manually and remember to update the total GU hours in the output file.
 
 ### To use
-1. Download the course schedule to be analyzed from TimeEdit site as a .xls file.
+1. Download the *English* version of the course schedule from TimeEdit site as a .xls file.
 
 *Note: You may need to edit the text in the "Reason" column so that it includes one of the Activity types from the table above.
 
@@ -45,4 +45,6 @@ count_hours("My_TimeEdit_File.xls", "My_Output_File.xlsx", "Course leader")
 *Note: Either your input file needs to be located in your working directory or you should specify the full path to the file.
 
 *Note: You need to edit the arguments to reflect your input file, desired output file name, and the name of the course leader.
+
+Any questions / issues?  Just tell Bob.
 
