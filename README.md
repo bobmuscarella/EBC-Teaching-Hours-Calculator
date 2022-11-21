@@ -4,11 +4,24 @@
 A tool to keep track of GU teaching hours for IEG courses.  Given a course schedule (downloaded from TimeEdit as a .xlsx file), the function provides a table of hours in different activity categories, as well as the total GU hours, per teacher.  For now, this requires an English version of the schedule to be downloaded from TimeEdit but we can make a Swedish version easily if that is of interest.  The tool uses one R function: `count_hours.R`
 
 ### Arguments
-`infile`: A course schedule (downloaded from TimeEdit as a .xls file - **currently must be in English**).  If the path is not included, this needs to be located in the working directory.
+`infile`: A course schedule (downloaded from TimeEdit as a .xls file - **currently must be in English, including column headings!**).  If the path is not included, this needs to be located in the working directory.
 
-`outfile`: The desired name of the output file (ending in .xls).  If the path is not included, it will be saved in the working directory.
+`outfile`: The desired name of the output file (ending in .csv or .xlsx).  If the path is not included, it will be saved in the working directory.
 
 `course_leader`: The name of the course leader for assigning administration hours.
+
+### Required packages
+A few packages are required for this function to work
+- [readxl](https://readxl.tidyverse.org/): Allows you to read into R the excel spreadsheet.
+- [plyr](https://github.com/hadley/plyr): Needed for rounding hours.
+- [writexl](https://docs.ropensci.org/writexl/): Only needed if you want to write an .xlsx file but not if you want to write a .csv file as output.
+
+You can install these packages with this code:
+```{r}
+install.packages("readxl")
+install.packages("plyr")
+install.packages("writexl")
+```
 
 ### Details
 Correctly assigning hours to a certain activity (and thus getting the correct GU multiplier for hours) depends on the "Reason" column from the TimeEdit schedule.  To ensure the correct GU multiplier for each activity, please include one of the activities from the table below in the 'Reason' column for all rows.  The scheduled hours for each of these activities get multiplied differently when computing the total number of GU hours.  We use the following table:
