@@ -104,6 +104,12 @@ The following row(s) in the input spreadsheet should be checked:"))
   message("Note: No development hours are assigned by this program. Add these manually if necessary and remember to update the total!")
   
   # Save output
-  xlsx::write.xlsx(hrsDF, outfile, row.names = F)
+  if(grepl(".xls", outfile)){
+    xlsx::write.xlsx(hrsDF, outfile, row.names = F)
+    }
+  
+  if(grepl(".csv", outfile)){
+  write.csv(hrsDF, outfile, row.names = F)
+  }
   
 }
