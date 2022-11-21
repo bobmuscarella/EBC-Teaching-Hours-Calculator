@@ -105,7 +105,7 @@ The following row(s) in the input spreadsheet should be checked:"))
   
   # Save output
   if(grepl(".xls", outfile)){
-    xlsx::write.xlsx(hrsDF, outfile, row.names = F)
+    writexl::write_xlsx(hrsDF, outfile)
     }
   
   if(grepl(".csv", outfile)){
