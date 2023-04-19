@@ -1,4 +1,4 @@
-count_hours <- function(infile, outfile, course_leader=NULL, exclude_no_teacher=FALSE, admin_hours=40){
+count_hours <- function(infile, outfile, course_leader=NULL, exclude_no_teacher=TRUE, admin_hours=40){
   
   # Read the input file (exclude first 5 rows header)
   te <- as.data.frame(readxl::read_excel(infile, skip=5))
