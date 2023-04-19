@@ -15,7 +15,11 @@ source("https://raw.githubusercontent.com/bobmuscarella/EBC-Teaching-Hours-Calcu
 
 3. Run the function in R by typing (edit the file names and course leader name for your case):
 ```{R}
-count_hours(infile="My_TimeEdit_File.xls", outfile="My_Output_File.xlsx", course_leader="Course leader", exclude_no_teacher=TRUE, admin_hours=40)
+count_hours(infile="My_TimeEdit_File.xls", 
+            outfile="My_Output_File.xlsx", 
+            course_leader="Course leader", 
+            exclude_no_teacher=TRUE, 
+            admin_hours=40)
 ```
 
 *Note: Either your input file needs to be located in the current working directory or you need to specify the full file path.
