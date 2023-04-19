@@ -6,29 +6,22 @@ A tool to keep track of GU teaching hours for IEG courses.  Given a course sched
 
 
 ### To use
-1. Download the a course schedule from the TimeEdit site as a .xls file.  This code should work with either *English* or *Swedish* versions of the schedule as long as the "Reason / Moment" column includes a word from the table above.
-
-* Note: If needed, you can edit the text in the "Reason" column after downloading so that it includes one of the Activity types from the table above.
+1. Download the a course schedule from the TimeEdit site as a .xls file.  This code should work with either *English* or *Swedish* versions of the schedule as long as the "Reason / Moment" column includes a word from the table above.  If needed, you can edit the text in the "Reason" column after downloading the file so that it includes one of the Activity types from the table below.
 
 2. Open R and load the funciton by running the following code:
 ```{R}
 source("https://raw.githubusercontent.com/bobmuscarella/EBC-Teaching-Hours-Calculator/master/Count_hours.R")
 ```
 
-3. Run the function in R by typing:
+3. Run the function in R by typing (edit the file names and course leader name for your case):
 ```{R}
-count_hours("My_TimeEdit_File.xls", "My_Output_File.xlsx", "Course leader")
+count_hours(infile="My_TimeEdit_File.xls", outfile="My_Output_File.xlsx", course_leader="Course leader", exclude_no_teacher=TRUE, admin_hours=40)
 ```
 
-*Notes: 
-  - The program will assign 40 hours for administration to the person you designate as Course Leader.
-  - Either your input file needs to be located in your working directory or you should specify the full path to the file.
-  - You need to edit the arguments to reflect your input file, desired output file name, and the name of the course leader.
-
-
+*Note: Either your input file needs to be located in the current working directory or you need to specify the full file path.
 
 ### Arguments
-  - `infile`: A course schedule (downloaded from TimeEdit as a .xls file - **currently must be in English, including column headings!**).  If the path is not included, this needs to be located in the working directory.
+  - `infile`: A course schedule (downloaded from TimeEdit as a .xls or .xlsx file).  If the path is not included, this needs to be located in the working directory.
   - `outfile`: The desired name of the output file (ending in .csv or .xlsx).  If the path is not included, it will be saved in the working directory.
   - `course_leader`: The name of the course leader for assigning administration hours.
   - `exclude_no_teacher`: Disregard information from class sessions with no teacher named.
