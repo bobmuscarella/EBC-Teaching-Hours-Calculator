@@ -1,7 +1,7 @@
 # IEG Teaching Hours Calculator
 
 ### Description 
-A tool to keep track of GU teaching hours for IEG courses.  Given a course schedule (downloaded from TimeEdit as a .xlsx file), the function provides a table of hours in different activity categories, as well as the total GU hours, per teacher.  For now, this requires an English version of the schedule to be downloaded from TimeEdit but we can make a Swedish version easily if that is of interest.  The tool uses one R function: `Count_hours.R`
+A tool to keep track of GU teaching hours for IEG courses.  Given a course schedule (downloaded from TimeEdit as a .xlsx file), the function provides a table of hours in different activity categories, as well as the total GU hours, per teacher.  For now, this requires an English version of the schedule to be downloaded from TimeEdit but we can make a Swedish version easily if that is of interest.  The tool uses one R function: `count_hours.R`
 
 
 
