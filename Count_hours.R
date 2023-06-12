@@ -18,7 +18,7 @@ count_hours <- function(infile, outfile, course_leader=NULL, exclude_no_teacher=
   }
   
   # Round activity hours to nearest 0.5 (e.g., 45 min sessions get 1 hour)
-  te$hours <- plyr::round_any(te$Length, 0.5, ceiling)
+  te$hours <- plyr::round_any(te$Length, 1, ceiling)
   
   ### Activity code
   # The hours assigned to each activity get multiplied to arrive at GU hours.
