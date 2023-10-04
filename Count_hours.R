@@ -18,7 +18,8 @@ count_hours <- function(infile, outfile, course_leader=NULL, exclude_no_teacher=
   }
   
   # Round activity hours to nearest 0.5 (e.g., 45 min sessions get 1 hour)
-  te$hours <- plyr::round_any(te$Length, 1, ceiling)
+  te$Length <- strptime(te$`End time`, format='%H:%M') - strptime(te$`Begin time`, format='%H:%M')
+  te$hours <- plyr::round_any(as.numeric(te$Length)/60, 1, ceiling)
   
   ### Activity code
   # The hours assigned to each activity get multiplied to arrive at GU hours.
@@ -49,7 +50,7 @@ You should check the following row(s) in the input spreadsheet:"))
     mat <- data.frame(Date=te$`Begin date`[which(is.na(te$multiplier))],
                       Time=te$`Begin time`[which(is.na(te$multiplier))],
                       Activity=te$Reason[which(is.na(te$multiplier))],
-                      Teacher=te$Staff[which(is.na(te$multiplier))])
+                      Teacher=te[,name_col][which(is.na(te$multiplier))])
     print(mat)
     
     message("If assigned to a teacher, these hours will be multiplied by 1 and counted as 'Supervision'. 
@@ -115,8 +116,3 @@ To ensure the correct multiplier, use one of these labels in the 'Reason/Moment'
   }
   
 }
-
-
-
-
-
