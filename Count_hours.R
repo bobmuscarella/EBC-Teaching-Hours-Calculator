@@ -32,14 +32,14 @@ count_hours <- function(infile, outfile, course_leader=NULL, exclude_no_teacher=
   te$activity <- tolower(te[,grep("Reason|Moment", colnames(te))])
   
   te$multiplier <- as.numeric(dplyr::case_when(
-    grepl('lecture|lab|föreläsning', te$activity) ~ "4",
-    grepl('exercise|övning', te$activity) ~ "2", 
+    grepl('lecture|föreläsning', te$activity) ~ "4",
+    grepl('exercise|lab|övning', te$activity) ~ "2", 
     grepl('excursion|field|seminar|exkursion|fältkurs|seminarium', te$activity) ~ "1.5",
     grepl('exam|presentation|supervision|tentamen|övervakning', te$activity) ~ "1"))
   
   te$activity_code <- as.numeric(dplyr::case_when(
-    grepl('lecture|lab|föreläsning', te$activity) ~ "1",
-    grepl('exercise|övning', te$activity) ~ "2", 
+    grepl('lecture|föreläsning', te$activity) ~ "1",
+    grepl('exercise|lab|övning', te$activity) ~ "2", 
     grepl('excursion|field|seminar|exkursion|fältkurs|seminarium', te$activity) ~ "3",
     grepl('exam|presentation|supervision|tentamen|övervakning', te$activity) ~ "4"))
   
@@ -55,8 +55,8 @@ You should check the following row(s) in the input spreadsheet:"))
     
     message("If assigned to a teacher, these hours will be multiplied by 1 and counted as 'Supervision'. 
 To ensure the correct multiplier, use one of these labels in the 'Reason/Moment' column:
-- lecture / lab / föreläsning (x 4)
-- exercise / övning (x 2)
+- lecture / föreläsning (x 4)
+- exercise / lab / övning (x 2)
 - excursion / seminar / exkursion / fältkurs / seminarium (x 1.5)
 - exam / presentation / supervision / tentamen / övervakning (x 1)\n")
   }

@@ -1,0 +1,38 @@
+
+# Set the infile as the .xlsx file downloaded from TimeEdit.
+infile="/Users/au529793/Desktop/TE-test-data/TimeEdit_2023-12-20_13_20.xlsx"
+
+
+# Run the function
+get_course_codes(infile, test_course_leader=F)
+
+
+# Function code
+get_course_codes <- function(infile=NULL, test_course_leader=FALSE){
+  
+  # Read the input file (exclude first 5 rows header)
+  teall <- as.data.frame(readxl::read_excel(infile, skip=5))
+  
+  teall <- teall[!is.na(teall$`Course signatur`),]
+
+  teall$code <- sapply(strsplit(teall$`Course signatur`, "-"), function(x) x[[1]])
+  
+  codes <- sort(unique(teall$code))
+  
+  # Sometimes we have multiple signatures for a given course code.  We want to keep the multiple signatures in the 'signature' column but aggregate the rows based on course code.
+  out <- aggregate(teall$`Course signatur`, by=list(teall$code), FUN=function(x) paste(unique(x), collapse="; "))
+  
+  names(out) <- c("code", "signature")
+  
+  out$course_name <- teall$Course[match(out$code, teall$code)]
+  
+  out$course_leader <- NA
+  
+  # FOR TESTING: TO ADD A TEMP TEST COURSE LEADER
+  if(test_course_leader){
+  out$course_leader <- sapply(strsplit(teall$Staff[match(out$code, teall$code)], ","), function(x) x[[1]])
+  }
+  
+  writexl::write_xlsx(out, paste0(dirname(infile), "/Course_list_", basename(infile)))
+  
+}

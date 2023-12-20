@@ -1,9 +1,13 @@
 
 ### PARAMETERS FOR TESTING
-infile="/Users/au529793/Desktop/TE-test-data/TimeEdit_2023-12-15_19_52.xlsx"
+infile="/Users/au529793/Desktop/TE-test-data/TimeEdit_2023-12-20_13_20.xlsx"
 outpath="/Users/au529793/Desktop/test-My_Multi-Output/"
-course_leaders=c("Jon Ågren", "Robert Muscarella", "Peter Eklöv","Sebastian Sobek","Eva Lindström")
-course_codes=c("1BG200", "1BG324", "1BG309","1BG305","1BG514")
+
+course_list <- readxl::read_xlsx(paste0(dirname(infile), "/Course_list_", basename(infile)))
+
+course_leaders=course_list$course_leader
+course_codes=course_list$code
+
 exclude_no_teacher=TRUE
 admin_hours=40
 
@@ -73,14 +77,14 @@ count_hours_multi <- function(infile,
     te$activity <- tolower(te[,grep("Reason|Moment", colnames(te))])
     
     te$multiplier <- as.numeric(dplyr::case_when(
-      grepl('lecture|lab|föreläsning', te$activity) ~ "4",
-      grepl('exercise|övning', te$activity) ~ "2", 
+      grepl('lecture|föreläsning', te$activity) ~ "4",
+      grepl('exercise|lab|övning', te$activity) ~ "2", 
       grepl('excursion|field|seminar|exkursion|fältkurs|seminarium', te$activity) ~ "1.5",
       grepl('exam|presentation|supervision|tentamen|övervakning', te$activity) ~ "1"))
     
     te$activity_code <- as.numeric(dplyr::case_when(
-      grepl('lecture|lab|föreläsning', te$activity) ~ "1",
-      grepl('exercise|övning', te$activity) ~ "2", 
+      grepl('lecture|föreläsning', te$activity) ~ "1",
+      grepl('exercise|lab|övning', te$activity) ~ "2", 
       grepl('excursion|field|seminar|exkursion|fältkurs|seminarium', te$activity) ~ "3",
       grepl('exam|presentation|supervision|tentamen|övervakning', te$activity) ~ "4"))
     
@@ -95,8 +99,8 @@ Specifically in the following row(s) from the input spreadsheet from TimeEdit:")
       print(mat)
       
       base::message("If assigned to a teacher, these hours have been multiplied by 1 and counted as 'Supervision'. To ensure the correct multiplier, use one of these labels in the 'Reason/Moment' column:
-- lecture / lab / föreläsning (x 4)
-- exercise / övning (x 2)
+- lecture / föreläsning (x 4)
+- exercise / lab / övning (x 2)
 - excursion / seminar / exkursion / fältkurs / seminarium (x 1.5)
 - exam / presentation / supervision / tentamen / övervakning (x 1)\n")
     }
@@ -141,18 +145,20 @@ Specifically in the following row(s) from the input spreadsheet from TimeEdit:")
                                "hours will be assigned to", 
                                course_leaders[i], 
                                "as course leader.")))
-    hrsDF[hrsDF$Teacher==course_leaders[i], 'Administration'] <- admin_hours
+    if(!is.na(course_leaders[i])){
+      hrsDF[hrsDF$Teacher==course_leaders[i], 'Administration'] <- admin_hours
+    }
     
     # Warning about no development hours given by this program
     base::message("- Development hours are not assigned by this program. Add these manually if needed and remember to update the GU hours.")
-    
     
     font1 <- fp_text(color = "blue", bold = TRUE, font.size = 14)
     font2 <- fp_text(font.size = 12)
     font3 <- fp_text(color = "red", font.size = 12)
     font4 <- fp_text(font.size = 8)
     
-    fpar1 <- fpar(ftext(paste("Report for TimeEdit hour counting of", course_codes[i]), prop=font1))
+    fpar1 <- fpar(ftext(paste0("Report for TimeEdit hour counting of ", course_codes[i], 
+                               " (", te$Course[1],")"), prop=font1))
     
     fpar2 <- fpar(ftext(ifelse(is.null(course_leaders[i]), 
                                "No course leader identified so administration hours will not be assigned.",  
@@ -176,12 +182,13 @@ Specifically, the following row(s) in the input spreadsheet from TimeEdit:"), pr
                           prop=font2))
       fpar9 <- fpar(ftext("- exam / presentation / supervision / tentamen / övervakning (x 1)", 
                           prop=font2))
-      
-      fpar11 <- fpar(ftext(paste0("Report generated ", Sys.Date(), 
-                                  " based on file: '", infile, 
-                                  "' and course signature ", te$`Course signatur`[1]),
-                           prop=font4))
     }
+    
+    fpar11 <- fpar(ftext(paste0("Report generated ", Sys.Date(), 
+                                " based on file: '", infile, 
+                                "' and course signature(s) ", 
+                                paste(unique(te$`Course signatur`), collapse="; ")),
+                         prop=font4))
     
     mydoc <- read_docx()
     mydoc <- body_add_fpar(mydoc, fpar1)
@@ -228,7 +235,7 @@ Specifically, the following row(s) in the input spreadsheet from TimeEdit:"), pr
                         paste0(outpath, "Courses_for_review/", course_codes[i], ".xlsx"))
 
     # Write the OG data
-    saveRDS(course_list, file=paste0(OG_Rdata_path, gsub(".xlsx", "", basename(infile)), ".RDA"))
+    saveRDS(course_list, file=paste0(paste0(outpath, "OG_data/"), gsub(".xlsx", "", basename(infile)), ".RDA"))
     
   }
 }
