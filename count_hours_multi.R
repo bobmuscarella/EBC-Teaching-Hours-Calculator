@@ -1,27 +1,3 @@
-
-### PARAMETERS FOR TESTING
-infile="/Users/au529793/Desktop/TE-test-data/TimeEdit_2023-12-20_13_20.xlsx"
-outpath="/Users/au529793/Desktop/test-My_Multi-Output/"
-
-course_list <- readxl::read_xlsx(paste0(dirname(infile), "/Course_list_", basename(infile)))
-
-course_leaders=course_list$course_leader
-course_codes=course_list$code
-
-exclude_no_teacher=TRUE
-admin_hours=40
-
-
-### TEST THE FUNCTION
-count_hours_multi(infile=infile,
-                  outpath=outpath,
-                  course_leaders=course_leaders,
-                  course_codes=course_codes,
-                  exclude_no_teacher=exclude_no_teacher,
-                  admin_hours=admin_hours)
-
-
-### FUNCTION CODE
 count_hours_multi <- function(infile, 
                               outpath, 
                               course_leaders=NULL, 

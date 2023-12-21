@@ -1,15 +1,3 @@
-### PARAMETERS FOR TESTING
-inpath="/Users/au529793/Desktop/test-My_Multi-Output/Courses_for_review/"
-outpath="/Users/au529793/Desktop/test-My_Multi-Output/"
-original_TE_file="/Users/au529793/Desktop/test-My_Multi-Output/OG_data/TimeEdit_2023-12-20_13_20.RDA"
-
-
-### TEST THE FUNCTION
-count_hours_teachers(inpath=inpath,
-                     outpath=outpath,
-                     original_TE_file=original_TE_file)
-
-### FUNCTION CODE
 count_hours_teachers <- function(inpath=NULL, 
                                  outpath=NULL,
                                  original_TE_file=NULL){

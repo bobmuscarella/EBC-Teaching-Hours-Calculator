@@ -1,13 +1,3 @@
-
-# Set the infile as the .xlsx file downloaded from TimeEdit.
-infile="/Users/au529793/Desktop/TE-test-data/TimeEdit_2023-12-20_13_20.xlsx"
-
-
-# Run the function
-get_course_codes(infile, test_course_leader=F)
-
-
-# Function code
 get_course_codes <- function(infile=NULL, test_course_leader=FALSE){
   
   # Read the input file (exclude first 5 rows header)
