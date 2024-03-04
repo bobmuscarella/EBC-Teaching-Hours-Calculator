@@ -1,0 +1,136 @@
+---
+title: "IEG TimeEdit hour counting demo"
+author: "Bob Muscarella <robert.muscarella@ebc.uu.se>"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Background
+
+This is a tool to keep track of GU teaching hours for IEG courses. Given a schedule (downloaded from TimeEdit as a .xlsx file), the functions can generate tables of hours in different activity categories, as well as the total GU hours, per teacher, per course. The general workflow is:
+
+-   Download one .xlsx table for all IEG staff in a given period
+-   Run `get_course_codes.R` to produce a table of courses included
+-   Edit the output course table by adding course leader
+-   Run `count_hours_multi.R` to produce hour tables for each course
+-   Course leaders review the hour tables, edit and comment as needed
+-   Run `count_hours_teachers.R` to produce individual teacher hour tables
+-   Teachers review their table, edit and comment as needed
+-   Run `compile_teacher_tables.R` to produce compiled table with all annotations and checks for consistency with original TE schedule
+
+### Before using this script...
+
+You need to first go to TimeEdit and use the search function to get a list of bookings for staff you are interested in, over a certain time period. You should download that as an .xlsx file and put it in your working directory.
+
+For this example, the file is named `TimeEdit_2023-12-20_13_20.xlsx` and it is located in the directory called `demo`.
+
+### 1. Source the functions
+
+Make the functions available with the following code:
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
+url <- "https://raw.githubusercontent.com/bobmuscarella/EBC-Teaching-Hours-Calculator/master/"
+source(paste0(url, "count_hours_multi.R"))
+source(paste0(url, "count_hours_teachers.R"))
+source(paste0(url, "get_course_codes.R"))
+source(paste0(url, "compile_from_teacher_tables.R"))
+```
+
+### 2. Set the `infile` as the .xlsx file downloaded from TimeEdit.
+
+Set the input file as it will be used in several places.
+
+```{r}
+infile="demo/TimeEdit_2023-12-20_13_20.xlsx"
+```
+
+Then, run the `get_course_codes` function:
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
+get_course_codes(infile=infile, 
+                 test_course_leader=FALSE)
+```
+
+### 3. Edit the course list
+
+Normally, you would open the file produced (`demo/Course_list_TimeEdit_2023-12-20_13_20.xlsx`) and manually add course leaders (also check to make sure all desired courses are included).
+
+### 4. Produce tables of course hours
+
+Read in the file produced in the last step (after adding course leaders)
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
+course_list <- readxl::read_xlsx(paste0(dirname(infile), "/Course_list_", basename(infile)))
+```
+
+Then, run the `count_hours_multi` function.
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
+count_hours_multi(infile=infile,
+                  outpath="demo/",
+                  course_leaders=course_list$course_leader,
+                  course_codes=course_list$code,
+                  exclude_no_teacher=TRUE,
+                  admin_hours=40)
+```
+
+Once the tables and reports for hours by courses are produced, they can be posted to a shared folder and an email can be sent to course leaders with the following information:
+
+> *Dear IEG course leaders,*
+>
+> *It is now time to check the hours for your course(s) during the period XX-XX based on the hours counted from TimeEdit. At the link below, you will find two files named with the course code (e.g., 1BGxxx.xlsx and 1BGxxx_Report.docx).*
+>
+> *The .docx file gives a brief overview of the course.*
+>
+> *The .xlsx file provides the names of all teachers listed on TimeEdit for your course and the number of hours in each teaching category (e.g., lecture, exercise) as well as the total number of GU hours for each teacher in the course.*
+>
+> *You should check the hours listed and, if you make any changes, include a brief comment to explain the change. If the hours are correct, then you do not need to edit the file.*
+>
+> *Link to access course hour tables: xxx*
+>
+> *Contact the study directors if you have any questions.*
+
+### 5. Produce tables hours of teacher hours
+
+Run this function to count teacher hours from the (edited) course hour tables.
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
+count_hours_teachers(inpath="demo/Courses_for_review/",
+                     outpath="demo/",
+                     original_TE_file="demo/OG_data/TimeEdit_2023-12-20_13_20.RDA")
+```
+
+Once the tables for hours by teachers are produced, they can be posted to a shared folder and an email can be sent to all teachers with the following information:
+
+> *Dear IEG teachers,*
+>
+> *It is now time to check the hours for your teaching during the period XX-XX based on the hours counted from TimeEdit. At the link below, you will find a .xlsx file with your name that includes all teaching hours recorded for each course your taught during this period. There should already be a comment from the course leader if they edited hours from what appears on TimeEdit.*
+>
+> *You should check your hours and, if you make any changes, include a brief comment to explain the change. If the hours are correct, then you do not need to edit the file.*
+>
+> *Link to access teacher hour tables: xxx*
+>
+> *Contact the study directors if you have any questions.*
+
+### 6. Compile from teacher tables
+
+The study director(s) shoud now compile the teacher hour tables and run checks for changes from original TimeEdit schedule.
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
+compile_teacher_tables(inpath="demo/Teachers_for_review",
+                       outpath="demo/",
+                       original_TE_file="demo/OG_data/TimeEdit_2023-12-20_13_20.RDA")
+
+```
+
+The output can be inspected in R or Excel:
+
+```{r, eval=FALSE}
+head(as.data.frame(readxl::read_xlsx(paste0("demo/Compilation/Compiled_", basename(infile)))), 10)
+```
+
+When all changes are resolved, the results can be uploaded to BP.

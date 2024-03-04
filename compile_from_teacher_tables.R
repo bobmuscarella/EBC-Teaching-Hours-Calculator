@@ -60,7 +60,7 @@ compile_teacher_tables <- function(inpath=NULL,
   dir.create(paste0(outpath, "Compilation"))
   writexl::write_xlsx(out, 
                       paste0(outpath, "Compilation/Compiled_", 
-                             gsub(".xlsx", "", basename(infile)), ".xlsx"))
+                             gsub(".RDA", "", basename(original_TE_file)), ".xlsx"))
   
 }
 

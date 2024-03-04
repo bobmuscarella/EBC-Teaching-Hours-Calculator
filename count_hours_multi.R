@@ -151,9 +151,9 @@ Specifically in the following row(s) from the input spreadsheet from TimeEdit:")
 Specifically, the following row(s) in the input spreadsheet from TimeEdit:"), prop=font3))
       
       fpar5 <- fpar(ftext("If assigned to a teacher, these hours were multiplied by 1 and counted as 'Supervision'. To ensure the correct multiplier, you need to use one of the following labels in the 'Reason/Moment' column when building your TimeEdit schedule:", prop=font3))
-      
-      fpar6 <- fpar(ftext("- lecture / lab / föreläsning (x 4)", prop=font2))
-      fpar7 <- fpar(ftext("- exercise / övning (x 2)", prop=font2))
+
+      fpar6 <- fpar(ftext("- lecture / föreläsning (x 4)", prop=font2))
+      fpar7 <- fpar(ftext("- exercise / lab / övning (x 2)", prop=font2))
       fpar8 <- fpar(ftext("- excursion / seminar / exkursion / fältkurs / seminarium (x 1.5)", 
                           prop=font2))
       fpar9 <- fpar(ftext("- exam / presentation / supervision / tentamen / övervakning (x 1)", 
