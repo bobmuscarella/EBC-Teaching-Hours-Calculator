@@ -39,6 +39,9 @@ count_hours_multi <- function(infile,
     
     # Round activity hours to nearest 0.5 (e.g., 45 min sessions get 1 hour)
     te$Length <- strptime(te$`End time`, format='%H:%M') - strptime(te$`Begin time`, format='%H:%M')
+    te$Length <- difftime(strptime(te$`End time`, format='%H:%M'), 
+                          strptime(te$`Begin time`, format='%H:%M'), 
+                          units = "mins")
     te$hours <- plyr::round_any(as.numeric(te$Length)/60, 1, ceiling)
     
     ### Activity code
