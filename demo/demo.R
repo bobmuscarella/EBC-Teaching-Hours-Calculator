@@ -2,7 +2,7 @@
 
 # 0. source the functions
 
-url <- "https://raw.githubusercontent.com/bobmuscarella/EBC-Teaching-Hours-Calculator/master/"
+url <- "https://raw.githubusercontent.com/bobmuscarella/EBC-Teaching-Hours-Calculator/master/Functions/"
 
 source(paste0(url, "count_hours_multi.R"))
 source(paste0(url, "count_hours_teachers.R"))

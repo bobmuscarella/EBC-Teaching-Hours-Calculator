@@ -33,7 +33,7 @@ For this example, the file is named `TimeEdit_2023-12-20_13_20.xlsx` and it is l
 Make the functions available with the following code:
 
 ```{r, message=FALSE, warning=FALSE, eval=FALSE}
-url <- "https://raw.githubusercontent.com/bobmuscarella/EBC-Teaching-Hours-Calculator/master/"
+url <- "https://raw.githubusercontent.com/bobmuscarella/EBC-Teaching-Hours-Calculator/master/Functions/"
 source(paste0(url, "count_hours_multi.R"))
 source(paste0(url, "count_hours_teachers.R"))
 source(paste0(url, "get_course_codes.R"))
