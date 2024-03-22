@@ -15,15 +15,14 @@ count_hours_teachers <- function(inpath=NULL,
   # Read in all course hour tables  
   for(f in seq_along(files)){
     tmp <- readxl::read_excel(paste0(inpath, files[f]))
+    # Fix missing course code (for teachers added by course leaders)
+    tmp$Code[is.na(tmp$Code)] <- gsub(".xlsx", "", files[f])
     course_hours_list[[f]] <- tmp
   }
   
   # Condense course hour table into a data.frame
   hours_table <- do.call(rbind, course_hours_list)
-  
-  # Fix missing course code (for teachers added by course leaders)
-  hours_table$Code[is.na(hours_table$Code)] <- hours_table$Code[!is.na(hours_table$Code)][1]
-  
+
   # Extract all teacher names from the condensed course hour table
   teachers <- sort(unique(hours_table$Teacher))
   
