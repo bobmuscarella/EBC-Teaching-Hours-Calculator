@@ -48,12 +48,16 @@ compile_teacher_tables <- function(inpath=NULL,
   out$GU_check_2 <- as.character(out$OG_TE_GU_hours == out$Total_GU_reported)
   
   for(r in 1:nrow(out)){
+    if(!is.na(out$GU_check_2[r])){
     if(out$GU_check_2[r]=="FALSE"){
       out$GU_check_2[r] <- paste0("Table hours = ", 
                                   out$Total_GU_reported[r], 
                                   ", TimeEdit hours = ", 
                                   og$Total_GU[match(paste(out$Code, out$Teacher)[r], 
                                                     paste(og$Code, og$Teacher))])
+      }
+    } else {
+      out$GU_check_2[r] <- "Teacher not in TE"
     }
   }
   
