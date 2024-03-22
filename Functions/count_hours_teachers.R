@@ -30,6 +30,9 @@ count_hours_teachers <- function(inpath=NULL,
     # Subset hours for the i teacher
     tmp <- hours_table[hours_table$Teacher %in% teachers[i],]
     
+    # Set any NA values to zero
+    tmp[,3:8][is.na(tmp[,3:8])] <- 0
+    
     # Sum the table hours
     GU_check_1 <- tmp$Administration + 
       tmp$Development + 
@@ -47,15 +50,21 @@ count_hours_teachers <- function(inpath=NULL,
     # Load original TE data
     og <- do.call(rbind, readRDS(original_TE_file))
     
-    # T/F if table GU hours match OG TE GU hours
-    tmp$GU_check_1 <- as.character(og$Total_GU[og$Teacher==teachers[i]] == GU_check_1)
+    # Check if teacher is in og TE data
+    if(teachers[i] %in% og$Teacher){
+      # T/F if table GU hours match OG TE GU hours
+      tmp$GU_check_1 <- as.character(og$Total_GU[og$Teacher==teachers[i]] == GU_check_1)
+    } else {
+      tmp$GU_check_1 <- "Teacher not in TE"
+    }
+      
     
     for(r in 1:nrow(tmp)){
       if(tmp$GU_check_1[r]=="FALSE"){
         tmp$GU_check_1[r] <- paste0("Table hours = ", 
-                                    GU_check_1, 
+                                    GU_check_1[r], 
                                     ", TimeEdit hours = ", 
-                                    og$Total_GU[og$Teacher==teachers[i]])
+                                    og$Total_GU[og$Teacher==teachers[i] & og$Code==tmp$Code[r]])
       }
     }
     
