@@ -21,6 +21,9 @@ count_hours_teachers <- function(inpath=NULL,
   # Condense course hour table into a data.frame
   hours_table <- do.call(rbind, course_hours_list)
   
+  # Fix missing course code (for teachers added by course leaders)
+  hours_table$Code[is.na(hours_table$Code)] <- hours_table$Code[!is.na(hours_table$Code)][1]
+  
   # Extract all teacher names from the condensed course hour table
   teachers <- sort(unique(hours_table$Teacher))
   
