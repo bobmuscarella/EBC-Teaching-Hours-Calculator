@@ -14,9 +14,14 @@ count_hours_teachers <- function(inpath=NULL,
 
   # Read in all course hour tables  
   for(f in seq_along(files)){
-    tmp <- readxl::read_excel(paste0(inpath, files[f]))
+    tmp <- readxl::read_excel(paste0(inpath, files[f]), col_types = c(rep("text", 2), 
+                                                                      rep("numeric", 7), 
+                                                                      rep("text", 2)))
     # Fix missing course code (for teachers added by course leaders)
     tmp$Code[is.na(tmp$Code)] <- gsub(".xlsx", "", files[f])
+    for(x in 3:9){
+      tmp[,x][is.na(tmp[,x])] <- 0
+    }
     course_hours_list[[f]] <- tmp
   }
   
