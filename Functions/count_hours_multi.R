@@ -129,7 +129,7 @@ Specifically in the following row(s) from the input spreadsheet from TimeEdit:")
     }
     
     # Warning about no development hours given by this program
-    base::message("- Development hours are not assigned by this program. Add these manually if needed and remember to update the GU hours.")
+    base::message("- Development hours are not assigned by this program. Add these manually if needed to the 'Development' column of the spreadsheet.")
     
     font1 <- fp_text(color = "blue", bold = TRUE, font.size = 14)
     font2 <- fp_text(font.size = 12)
