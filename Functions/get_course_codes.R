@@ -1,4 +1,6 @@
-get_course_codes <- function(infile=NULL, test_course_leader=FALSE){
+get_course_codes <- function(infile=NULL, 
+                             test_course_leader=FALSE, 
+                             courses_to_skip=c("1BG411", "1BG405")){
   
   # Read the input file (exclude first 5 rows header)
   teall <- as.data.frame(readxl::read_excel(infile, skip=5))
@@ -7,10 +9,15 @@ get_course_codes <- function(infile=NULL, test_course_leader=FALSE){
 
   teall$code <- sapply(strsplit(teall$`Course signatur`, "-"), function(x) x[[1]])
   
+  # Remove courses identified as online only or for whatever reason
+  teall <- teall[!teall$code %in% courses_to_skip,]
+  
   codes <- sort(unique(teall$code))
   
   # Sometimes we have multiple signatures for a given course code.  We want to keep the multiple signatures in the 'signature' column but aggregate the rows based on course code.
-  out <- aggregate(teall$`Course signatur`, by=list(teall$code), FUN=function(x) paste(unique(x), collapse="; "))
+  out <- aggregate(teall$`Course signatur`, 
+                   by=list(teall$code), 
+                   FUN=function(x) paste(unique(x), collapse="; "))
   
   names(out) <- c("code", "signature")
   
