@@ -1,6 +1,7 @@
 get_course_codes <- function(infile=NULL, 
                              test_course_leader=FALSE, 
-                             courses_to_skip=c("1BG411", "1BG405")){
+                             courses_to_skip=c("1BG411", "1BG405", 
+                                               "1BG600", "1BG602", "1BG604", "1BG606", "1BG607")){
   
   # Read the input file (exclude first 5 rows header)
   teall <- as.data.frame(readxl::read_excel(infile, skip=5))
