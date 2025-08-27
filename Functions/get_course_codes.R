@@ -20,7 +20,7 @@ get_course_codes <- function(infile=NULL,
   codes <- sort(unique(teall$code))
   
   # Sometimes we have multiple signatures for a given course code.  We want to keep the multiple signatures in the 'signature' column but aggregate the rows based on course code.
-  out <- aggregate(teall$`Course signatur`, 
+  out <- aggregate(teall[,foccol], 
                    by=list(teall$code), 
                    FUN=function(x) paste(unique(x), collapse="; "))
   
