@@ -13,15 +13,19 @@ count_hours_multi <- function(infile,
   # Create the output file structure ()
   dir.create(paste0(outpath, "Courses_for_review"))
   dir.create(paste0(outpath, "OG_data"))
-
+  
   # Read the input file (exclude first 5 rows header)
   teall <- as.data.frame(readxl::read_excel(infile, skip=5))
   
   # Loop through the individual courses included in the multi-course schedule downloaded from TimeEdit
   for(i in seq_along(course_codes)){
     
+    # Find the 'course signature' column
+    # It was wisely renamed since an update of TE to a duplicate column name 'course'
+    foccol <- which(names(teall) %in% c("`Course signatur", "Course...23"))
+    
     # Subset the i course
-    te <- teall[grepl(course_codes[i], teall$`Course signatur`),]
+    te <- teall[grepl(course_codes[i], teall[,foccol]),]
     
     # Exclude last extra rows
     te <- te[!is.na(te[,3]),]
@@ -154,7 +158,7 @@ Specifically in the following row(s) from the input spreadsheet from TimeEdit:")
 Specifically, the following row(s) in the input spreadsheet from TimeEdit:"), prop=font3))
       
       fpar5 <- fpar(ftext("If assigned to a teacher, these hours were multiplied by 1 and counted as 'Supervision'. To ensure the correct multiplier, you need to use one of the following labels in the 'Reason/Moment' column when building your TimeEdit schedule:", prop=font3))
-
+      
       fpar6 <- fpar(ftext("- lecture / föreläsning (x 4)", prop=font2))
       fpar7 <- fpar(ftext("- exercise / lab / övning (x 2)", prop=font2))
       fpar8 <- fpar(ftext("- excursion / seminar / exkursion / fältkurs / seminarium (x 1.5)", 
@@ -166,7 +170,7 @@ Specifically, the following row(s) in the input spreadsheet from TimeEdit:"), pr
     fpar11 <- fpar(ftext(paste0("Report generated ", Sys.Date(), 
                                 " based on file: '", infile, 
                                 "' and course signature(s) ", 
-                                paste(unique(te$`Course signatur`), collapse="; ")),
+                                paste(unique(te[,foccol]), collapse="; ")),
                          prop=font4))
     
     mydoc <- read_docx()
@@ -212,15 +216,9 @@ Specifically, the following row(s) in the input spreadsheet from TimeEdit:"), pr
     names(course_list)[i] <- course_codes[i]
     writexl::write_xlsx(cbind(hrsDF, Course_leader_comments), 
                         paste0(outpath, "Courses_for_review/", course_codes[i], ".xlsx"))
-
+    
     # Write the OG data
     saveRDS(course_list, file=paste0(paste0(outpath, "OG_data/"), gsub(".xlsx", "", basename(infile)), ".RDA"))
     
   }
 }
-
-
-
-
-
-
