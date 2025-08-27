@@ -25,8 +25,11 @@ get_course_codes <- function(infile=NULL,
                    FUN=function(x) paste(unique(x), collapse="; "))
   
   names(out) <- c("code", "signature")
-  
-  out$course_name <- teall$Course[match(out$code, teall$code)]
+                   
+  # Find the course name column (in a new TE update there are 2 columns called 'Course')
+  namecol <- which(grepl("Course", names(teall)))[1]
+
+  out$course_name <- teall[,namecol][match(out$code, teall$code)]
   
   out$course_leader <- NA
   
