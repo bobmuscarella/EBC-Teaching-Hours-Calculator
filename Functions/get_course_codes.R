@@ -5,11 +5,15 @@ get_course_codes <- function(infile=NULL,
   
   # Read the input file (exclude first 5 rows header)
   teall <- as.data.frame(readxl::read_excel(infile, skip=5))
-  
-  teall <- teall[!is.na(teall$`Course signatur`),]
 
-  teall$code <- sapply(strsplit(teall$`Course signatur`, "-"), function(x) x[[1]])
+  # Find the 'course signature' column 
+  # It was wisely renamed since an update of TE to a duplicate column name 'course'
+  foccol <- which(names(teall) %in% c("`Course signatur", "Course...23"))
   
+  teall <- teall[!is.na(teall[,foccol]),]
+
+  teall$code <- sapply(strsplit(teall[,foccol], "-"), function(x) x[[1]])
+    
   # Remove courses identified as online only or for whatever reason
   teall <- teall[!teall$code %in% courses_to_skip,]
   
